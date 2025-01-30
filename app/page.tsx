@@ -1,9 +1,9 @@
-
+import {Button} from "@/components/ui/button"
 
 export default function Home() {
   return (
     <div>
-      Cinema
+      <Button>Cinema</Button>
     </div>
   );
 }

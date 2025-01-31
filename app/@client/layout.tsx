@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "../globals.css";
 
 
 import Navbar from "@/components/Navbar";
@@ -17,15 +17,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`kanit-regular antialiased`}
+        className={`kanit-regular antialiased `}
       >
-      <Navbar/>
-        <div className={"px-14 pt-8"}>
-            {children}
-        </div>
-
+      <Navbar />
+      <div className={"px-14 pt-8"}>
+          {children}
+      </div>
       </body>
     </html>
   );

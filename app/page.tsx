@@ -1,9 +1,12 @@
+import React from 'react';
+import Link from "next/link";
 
+const Home = () => {
+    return (
+        <div>
+            <Link href="/admin">Admin</Link>
+        </div>
+    );
+};
 
-export default function Home() {
-  return (
-    <div>
-      Cinema
-    </div>
-  );
-}
+export default Home;

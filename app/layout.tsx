@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import {Smooch_Sans} from "next/font/google";
 import "./globals.css";
 
 

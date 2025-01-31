@@ -4,7 +4,7 @@ import Link from "next/link";
 const Home = () => {
     return (
         <div>
-            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/admin">Admin</Link>
         </div>
     );
 };

@@ -1,8 +1,8 @@
+
 import type { Metadata } from "next";
 import "./globals.css";
 
 
-import {ThemeProvider} from "@/components/ThemeProvider";
 import Navbar from "@/components/Navbar";
 
 
@@ -22,18 +22,7 @@ export default function RootLayout({
       <body
         className={`kanit-regular antialiased`}
       >
-      <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-      >
-          <div className={"px-14 pt-8"}>
-              {children}
-          </div>
-      </ThemeProvider>
-
-
+          {children}
       </body>
     </html>
   );

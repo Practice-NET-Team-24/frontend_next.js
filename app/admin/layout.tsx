@@ -1,8 +1,8 @@
-
 import type { Metadata } from "next";
 import "../globals.css";
 
 
+import {ThemeProvider} from "@/components/ThemeProvider";
 import Navbar from "@/components/Navbar";
 
 
@@ -18,13 +18,15 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-      <>
-          <Navbar/>
-          <div className={"px-14 pt-0 dark"}>
+      <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+      >
+          <div className={"px-14 pt-4"}>
               {children}
           </div>
-
-      </>
-
+      </ThemeProvider>
   );
 }

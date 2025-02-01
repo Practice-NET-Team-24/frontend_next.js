@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 const Navbar = () => {
     return (
@@ -14,7 +15,7 @@ const Navbar = () => {
                 <div className={"flex justify-between items-center gap-6"}>
                     <div>PROGRAM</div>
                     <div>
-                        Log In
+                        <Link href={"/login"}>Log In</Link>
                     </div>
                     <div>
                         Sign Up

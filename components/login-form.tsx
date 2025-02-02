@@ -19,7 +19,7 @@ export default function LoginForm({
 }: React.ComponentPropsWithoutRef<"div">) {
 
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+  const callbackUrl = searchParams.get('callbackUrl') || '/client';
   const [errorMessage, formAction, isPending] = useActionState(
       authenticate,
       undefined,
@@ -34,11 +34,11 @@ export default function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
+            <div className="flex flex-col gap-6 ">
+              <div className="grid gap-2 ">
                 <Label htmlFor="email">Email</Label>
                 <input
-                    className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-4 text-sm outline-2 placeholder:text-gray-500"
+                    className="text-black peer block w-full rounded-md border border-gray-200 py-[9px] pl-4 text-sm outline-2 placeholder:text-gray-500"
                     id="email"
                     type="email"
                     name="email"
@@ -56,7 +56,7 @@ export default function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <input className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-4 text-sm outline-2 placeholder:text-gray-500"
+                <input className=" text-black peer block w-full rounded-md border border-gray-200 py-[9px] pl-4 text-sm outline-2 placeholder:text-gray-500"
                     id="password"
                     type="password"
                     name="password"
@@ -72,7 +72,7 @@ export default function LoginForm({
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
+              <a href="/client/signup" className="underline underline-offset-4">
                 Sign up
               </a>
             </div>

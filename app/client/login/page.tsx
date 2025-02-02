@@ -1,7 +1,6 @@
 
 import { Suspense } from 'react';
 import LoginForm from "@/components/login-form";
-import Navbar from "@/components/Navbar";
 
 export default function LoginPage() {
     return (
@@ -12,5 +11,6 @@ export default function LoginPage() {
                 </Suspense>
             </div>
         </main>
+
     );
 }

@@ -1,18 +1,7 @@
-import React from 'react';
-import Link from "next/link";
-import Navbar from "@/components/Navbar";
+import {redirect} from "next/navigation";
 
 const Home = () => {
-    return (
-        <>
-            <Navbar/>
-            <div className={"px-14 py-4"}>
-                <Link href="/admin">Admin</Link>
-            </div>
-
-        </>
-
-    );
+    redirect("/client");
 };
 
 export default Home;

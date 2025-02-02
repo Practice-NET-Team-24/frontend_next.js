@@ -121,7 +121,7 @@
   font-style: italic;
 }
 
-@layer base {
+@layer utilities {
   :root {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;

@@ -1,12 +1,12 @@
 import { AppSidebar } from "@/components/app-sidebar"
-import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import {ModeToggle} from "@/components/ui/modeToggle";
 
+
+// Access is restricted by middleware
 export default function Page() {
   return (
     <SidebarProvider>
@@ -15,12 +15,6 @@ export default function Page() {
         <header className="flex  items-center  px-4 pb-4 justify-between ">
             <div>
               <SidebarTrigger className="-ml-1" />
-            </div>
-            <div>
-              <Separator orientation="vertical" className="mr-2 h-4" />
-            </div>
-            <div>
-              <ModeToggle/>
             </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">

@@ -1,7 +1,7 @@
 "use client"
 
 import {
-  LogOut,
+  PowerIcon,
 } from "lucide-react"
 
 import {
@@ -23,6 +23,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import signOutHandler from "@/lib/signOutHandler";
 
 export function NavUser({
   user,
@@ -74,8 +75,16 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <LogOut />
-              Log out
+              <form
+                  action={signOutHandler}
+              >
+                <button
+                    type={"submit"}
+                    className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium  hover:text-gray-700 md:flex-none md:justify-start md:p-2 md:px-3 dark text-black">
+                  <PowerIcon className="w-6" />
+                  <div className="hidden md:block  w-full">Sign Out</div>
+                </button>
+              </form>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -1,12 +1,7 @@
-import React from 'react';
-import Link from "next/link";
+import {redirect} from "next/navigation";
 
 const Home = () => {
-    return (
-        <div>
-            <Link href="/admin">Admin</Link>
-        </div>
-    );
+    redirect("/client");
 };
 
 export default Home;

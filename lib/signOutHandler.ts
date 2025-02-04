@@ -4,5 +4,5 @@ import {deleteSession} from "@/lib/sessions";
 
 export default async function signOutHandler() {
         await deleteSession();
-        return await signOut({ redirectTo: '/' });
+        return await signOut({ redirectTo: '/client' });
 }

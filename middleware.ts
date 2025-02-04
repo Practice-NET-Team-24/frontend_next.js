@@ -10,7 +10,7 @@ import {Role} from "@/lib/definitions";
 
 // 1. Specify protected and public routes
 const protectedRoutes = ['/admin']
-const publicRoutes = ['/login', '/signup', '/']
+const publicRoutes = ['/client/login', '/client/signup', '/', '/client']
 
 export default async function middleware(req: NextRequest) {
     // 2. Check if the current route is protected or public
@@ -23,13 +23,14 @@ export default async function middleware(req: NextRequest) {
     const session = await decrypt(cookie)
 
     console.log('session', session)
+    if (isProtectedRoute && (session && session.role !== Role.ADMIN)) {
+        return NextResponse.redirect(new URL('/client', req.nextUrl));
+    }
     if (isProtectedRoute && (!session || session.role !== Role.ADMIN)) {
         return NextResponse.redirect(new URL('/client/login', req.nextUrl));
     }
 
-    if (session?.role === Role.ADMIN && !req.nextUrl.pathname.startsWith('/admin')) {
-        return NextResponse.redirect(new URL('/admin', req.nextUrl));
-    }
+
 
     return NextResponse.next()
 }

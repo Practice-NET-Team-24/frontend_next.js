@@ -1,7 +1,7 @@
 
 export enum Role {
     ADMIN = "Admin",
-    USER = "User",
+    USER = "Client",
 }
 export type User = {
     id: number;
@@ -33,7 +33,7 @@ export const SignupFormSchema = z.object({
             message: 'Contain at least one special character.',
         })
         .trim(),
-    role: z.string()
+    role: z.string().default(Role.USER),
 })
 
 export type FormState =

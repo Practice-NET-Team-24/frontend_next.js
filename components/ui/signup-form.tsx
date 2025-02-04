@@ -5,8 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {useSearchParams} from "next/navigation";
 
 export default function SignupForm() {
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get('callbackUrl') || '/client';
     const [state, action, pending] = useActionState(signup, undefined);
 
     return (
@@ -22,13 +25,13 @@ export default function SignupForm() {
                             <Label htmlFor="name">Name</Label>
                             <input
                                 className="text-black peer block w-full rounded-md border border-gray-200 py-[9px] pl-4 text-sm outline-2 placeholder:text-gray-500"
-                                id="name"
+                                id="username"
                                 type="text"
-                                name="name"
+                                name="username"
                                 placeholder="Username"
                                 required
                             />
-                            {state?.errors?.name && <p className="text-red-500">{state.errors.name}</p>}
+                            {state?.errors?.username && <p className="text-red-500">{state.errors.username}</p>}
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="email">Email</Label>
@@ -55,7 +58,9 @@ export default function SignupForm() {
                             />
                             {state?.errors?.password && <p className="text-red-500">{state.errors.password}</p>}
                         </div>
-                        <Button type="submit" className="mt-4 w-full" aria-disabled={pending}>
+
+                        <Button className="mt-4 w-full" aria-disabled={pending}>
+                            <input type="hidden" name="redirectTo" value={callbackUrl} />
                             {pending ? "Processing..." : "Sign Up"}
                         </Button>
                     </div>

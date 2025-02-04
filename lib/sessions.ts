@@ -13,15 +13,28 @@ export async function encrypt(payload: SessionPayload) {
         .sign(encodedKey)
 }
 
-export async function decrypt(session: string | undefined = '') {
+export async function decrypt(session: string | undefined = ''): Promise<SessionPayload | null> {
+    if (!session) return null;
+
     try {
         const { payload } = await jwtVerify(session, encodedKey, {
             algorithms: ['HS256'],
-        })
-        // return payload as {id: number, username: string, role: Role}
-        return payload
+        });
+
+        const { id, username, role } = payload;
+
+        if (
+            typeof id === 'number' &&
+            typeof username === 'string' &&
+            typeof role === 'string'
+        ) {
+            return { id, username, role: role as Role };
+        }
+
+        return null;
     } catch (error) {
-        console.log('Failed to verify session')
+        console.log('Failed to verify session:', error);
+        return null;
     }
 }
 

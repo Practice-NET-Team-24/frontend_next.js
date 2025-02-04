@@ -5,6 +5,8 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 
+
+// Access is restricted by middleware
 export default function Page() {
   return (
     <SidebarProvider>

@@ -20,6 +20,22 @@ export async function POST(req: Request) {
         const { username, email, password } = result.data;
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        const existingUser = await db
+            .selectFrom("users")
+            .where((eb) => eb.or([
+                eb("username", "=", username),
+                eb("email", "=", email)
+            ]))
+            .selectAll()
+            .executeTakeFirst();
+
+        if (existingUser) {
+            return NextResponse.json(
+                { errors: { general: "Username or email already taken." } },
+                { status: 400 }
+            );
+        }
+
         const newUser = {
             username,
             email,
@@ -33,12 +49,11 @@ export async function POST(req: Request) {
             .returning(['id', 'username', 'role'])
             .executeTakeFirstOrThrow();
 
-        await createSession(insertedUser)
-        redirect('/client')
-        return NextResponse.json(insertedUser);
+        return NextResponse.json(insertedUser)
     } catch (error) {
+        console.log(error);
         return NextResponse.json(
-            { message: "An error occurred during account creation." },
+            { message: JSON.stringify(error) },
             { status: 500 }
         );
     }

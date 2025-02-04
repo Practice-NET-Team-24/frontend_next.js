@@ -1,10 +1,11 @@
 import React from 'react';
 import Link from "next/link";
+import {updateSession} from "@/lib/sessions";
 
-const Home = () => {
+const Home = async () => {
     return (
         <div className={""}>
-            <Link href="/admin">Admin</Link>
+            Home
         </div>
     );
 };

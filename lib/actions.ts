@@ -2,8 +2,9 @@
 
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import {deleteSession} from "@/lib/sessions";
+import {createSession, deleteSession} from "@/lib/sessions";
 import {redirect} from "next/navigation";
+import {SessionPayload} from "@/lib/definitions";
 
 // ...
 
@@ -29,14 +30,13 @@ export async function authenticate(
     }
 }
 
-export async function signup(formData: FormData) {
+export async function signup(prevState: string | undefined, formData: FormData) {
     const payload = {
-        username: formData.get("name"),
+        username: formData.get("username"),
         email: formData.get("email"),
         password: formData.get("password"),
     };
-
-    const response = await fetch("/api/signup", {
+    const response = await fetch(process.env.BASE_URL + "/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -46,6 +46,16 @@ export async function signup(formData: FormData) {
         const { errors, message } = await response.json();
         return { errors: errors || { general: message } };
     }
+
+    const data = await response.json()
+    const sessionPayload: SessionPayload = {
+        id: data.id,
+        username: data.username,
+        role: data.role,
+    }
+
+    await createSession(sessionPayload);
+    redirect("/client")
 
     return await response.json();
 }

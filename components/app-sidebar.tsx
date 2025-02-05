@@ -35,7 +35,7 @@ const data = {
       isActive: true,
       items: [
         {
-          title: "Edit",
+          title: "edit",
           url: "#",
         },
         {

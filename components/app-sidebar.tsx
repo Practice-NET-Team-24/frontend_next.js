@@ -16,7 +16,6 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import {verifySession} from "@/lib/dal";
 import {useEffect} from "react";
 import {Role} from "@/lib/definitions";
 

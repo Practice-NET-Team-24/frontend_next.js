@@ -1,6 +1,9 @@
+
 import type { Metadata } from "next";
 import "../globals.css";
-import {checkUserRoleSession} from "@/lib/sessions";
+import {AppSidebar} from "@/components/app-sidebar";
+import {SidebarInset, SidebarProvider} from "@/components/ui/sidebar";
+import AdminNav from "@/components/ui/admin-nav";
 
 
 export const metadata: Metadata = {
@@ -15,11 +18,18 @@ export default async function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const role = await checkUserRoleSession()
-  return (
-          <div className={"px-14 pt-4"}>
 
-            {children}
-          </div>
+  return (
+          <SidebarProvider>
+              <AppSidebar />
+              <SidebarInset>
+                  <AdminNav/>
+                  <div className={"px-2"}>
+                      {children}
+                  </div>
+
+              </SidebarInset>
+          </SidebarProvider>
+
   );
 }

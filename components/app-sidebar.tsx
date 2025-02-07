@@ -35,7 +35,7 @@ const data = {
       items: [
         {
           title: "edit",
-          url: "#",
+          url: "/admin/film/edit",
         },
         {
           title: "Create",

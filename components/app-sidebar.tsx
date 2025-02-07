@@ -16,7 +16,6 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import {verifySession} from "@/lib/dal";
 import {useEffect} from "react";
 import {Role} from "@/lib/definitions";
 
@@ -35,8 +34,8 @@ const data = {
       isActive: true,
       items: [
         {
-          title: "Edit",
-          url: "#",
+          title: "edit",
+          url: "/admin/film/edit",
         },
         {
           title: "Create",

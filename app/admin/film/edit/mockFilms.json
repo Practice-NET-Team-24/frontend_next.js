@@ -1,0 +1,112 @@
+[
+  {
+    "Id": 1,
+    "Name": "Inception",
+    "Description": "A mind-bending thriller where dreams are a new frontier for espionage. Cobb, a skilled thief, is tasked with planting an idea in someone's mind through a dangerous dream-sharing technology.",
+    "ImageURL": "https://m.media-amazon.com/images/I/51EG732BV3L._AC_.jpg",
+    "TrailerURL": "https://www.youtube.com/embed/YoHD9XEInc0",
+    "AgeRestriction": 13,
+    "Duration": 8889,
+    "Rating": 8.8,
+    "Sessions": [
+      { "SessionId": 101, "Time": "2025-02-07T14:00:00" },
+      { "SessionId": 102, "Time": "2025-02-07T18:00:00" }
+    ],
+    "MovieGenres": [
+      { "GenreId": 1, "GenreName": "Sci-Fi" },
+      { "GenreId": 2, "GenreName": "Thriller" }
+    ],
+    "MovieActors": [
+      { "ActorId": 201, "ActorName": "Leonardo DiCaprio" },
+      { "ActorId": 202, "ActorName": "Joseph Gordon-Levitt" }
+    ]
+  },
+  {
+    "Id": 2,
+    "Name": "The Dark Knight",
+    "Description": "Batman faces his most formidable enemy, the Joker, who plunges Gotham City into chaos. A gripping tale of heroism and sacrifice.",
+    "ImageURL": "https://m.media-amazon.com/images/I/51k0qaipFhL._AC_.jpg",
+    "TrailerURL": "https://www.youtube.com/embed/EXeTwQWrcwY",
+    "AgeRestriction": 13,
+    "Duration": 9138,
+    "Rating": 9.0,
+    "Sessions": [
+      { "SessionId": 103, "Time": "2025-02-07T15:00:00" },
+      { "SessionId": 104, "Time": "2025-02-07T19:00:00" }
+    ],
+    "MovieGenres": [
+      { "GenreId": 3, "GenreName": "Action" },
+      { "GenreId": 4, "GenreName": "Crime" }
+    ],
+    "MovieActors": [
+      { "ActorId": 203, "ActorName": "Christian Bale" },
+      { "ActorId": 204, "ActorName": "Heath Ledger" }
+    ]
+  },
+  {
+    "Id": 3,
+    "Name": "Interstellar",
+    "Description": "A team of explorers travels through a wormhole to search for a habitable planet as Earth faces ecological disaster.",
+    "ImageURL": "https://m.media-amazon.com/images/I/71nA4xX8Z5L._AC_SL1188_.jpg",
+    "TrailerURL": "https://www.youtube.com/embed/zSWdZVtXT7E",
+    "AgeRestriction": 10,
+    "Duration": 10140,
+    "Rating": 8.6,
+    "Sessions": [
+      { "SessionId": 105, "Time": "2025-02-07T16:00:00" },
+      { "SessionId": 106, "Time": "2025-02-07T20:30:00" }
+    ],
+    "MovieGenres": [
+      { "GenreId": 1, "GenreName": "Sci-Fi" },
+      { "GenreId": 5, "GenreName": "Drama" }
+    ],
+    "MovieActors": [
+      { "ActorId": 205, "ActorName": "Matthew McConaughey" },
+      { "ActorId": 206, "ActorName": "Anne Hathaway" }
+    ]
+  },
+  {
+    "Id": 4,
+    "Name": "Avatar",
+    "Description": "A paraplegic Marine becomes part of the Na'vi people on Pandora and joins a rebellion against human colonization.",
+    "ImageURL": "https://m.media-amazon.com/images/I/41VuJKT5F-L._AC_.jpg",
+    "TrailerURL": "https://www.youtube.com/embed/5PSNL1qE6VY",
+    "AgeRestriction": 13,
+    "Duration": 9720,
+    "Rating": 7.8,
+    "Sessions": [
+      { "SessionId": 107, "Time": "2025-02-07T13:30:00" },
+      { "SessionId": 108, "Time": "2025-02-07T21:00:00" }
+    ],
+    "MovieGenres": [
+      { "GenreId": 1, "GenreName": "Sci-Fi" },
+      { "GenreId": 6, "GenreName": "Adventure" }
+    ],
+    "MovieActors": [
+      { "ActorId": 207, "ActorName": "Sam Worthington" },
+      { "ActorId": 208, "ActorName": "Zoe Saldana" }
+    ]
+  },
+  {
+    "Id": 5,
+    "Name": "Avengers: Endgame",
+    "Description": "The remaining Avengers unite for one last stand to undo the catastrophic events caused by Thanos and restore balance to the universe.",
+    "ImageURL": "https://m.media-amazon.com/images/I/81ExhpBEbHL._AC_SY679_.jpg",
+    "TrailerURL": "https://www.youtube.com/embed/TcMBFSGVi1c",
+    "AgeRestriction": 13,
+    "Duration": 10800,
+    "Rating": 8.4,
+    "Sessions": [
+      { "SessionId": 109, "Time": "2025-02-07T17:00:00" },
+      { "SessionId": 110, "Time": "2025-02-07T22:00:00" }
+    ],
+    "MovieGenres": [
+      { "GenreId": 3, "GenreName": "Action" },
+      { "GenreId": 6, "GenreName": "Adventure" }
+    ],
+    "MovieActors": [
+      { "ActorId": 209, "ActorName": "Robert Downey Jr." },
+      { "ActorId": 210, "ActorName": "Chris Evans" }
+    ]
+  }
+]

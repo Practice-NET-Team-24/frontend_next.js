@@ -1,0 +1,98 @@
+/* Загальний стиль Swiper */
+.swiper {
+    width: 100%;
+    height: 100vh;
+  }
+  
+  /* Кнопки перемикання (стрілки) */
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: white !important; /* Примусово змінюємо колір */
+    background: rgba(0, 0, 0, 0.5) !important; /* Темний фон */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  /* Міняємо колір іконки стрілки */
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    filter: invert(1); /* Робимо стрілки білими */
+    font-size: 24px !important;
+  }
+  
+  /* Зміна стилю при наведенні */
+  .swiper-button-next:hover,
+  .swiper-button-prev:hover {
+    background: rgba(255, 0, 0, 0.8) !important; /* Червоний фон */
+  }
+  
+  /* Стиль для крапочок (пагінації) */
+  .swiper-pagination-bullet {
+    background: white !important; /* Білий колір */
+    width: 12px !important;
+    height: 12px !important;
+    opacity: 0.7 !important;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  /* Активна крапка */
+  .swiper-pagination-bullet-active {
+    background: red !important; /* Червоний колір активної */
+    opacity: 1 !important;
+    transform: scale(1.2) !important; /* Збільшення активної */
+  }
+  .swiper {
+    width: 100%;
+    height: 100vh;
+}
+
+.slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Темний фон для кращої видимості тексту */
+}
+
+.content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+}
+
+.title {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.button {
+    display: inline-block;
+    background-color: red;
+    color: white;
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    transition: background 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: darkred;
+}

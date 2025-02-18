@@ -1,0 +1,75 @@
+/* Основний стиль навбару */
+.navbar {
+    padding: 16px 56px;
+    background-color: rgb(0, 0, 0);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-family: "Montserrat", sans-serif;
+}
+
+/* Контейнер для вирівнювання */
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Логотип */
+.logo img {
+    width: 80px;
+}
+
+/* Центр "Афіша" */
+.menuItem {
+    font-size: 18px;
+    font-weight: 600;
+    transition: color 0.3s ease-in-out;
+}
+
+.menuItem:hover {
+    color: yellow;
+}
+
+/* Адмінська кнопка */
+.adminButton {
+    background-color: #f5f5f5;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: color 0.3s ease-in-out;
+}
+
+.adminButton:hover {
+    color: yellow;
+}
+
+/* Контейнер для "Вхід" та "Реєстрація" */
+.authContainer {
+    display: flex;
+    gap: 20px;
+    background-color: #535353;
+    padding: 10px 20px;
+    border-radius: 50px;
+}
+
+/* Кнопки "Вхід" та "Реєстрація" */
+.authLink {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.3s ease-in-out;
+}
+
+.authLink:hover {
+    color: yellow;
+}
+.menuItem {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+.menuItem:hover {
+    color: yellow;
+}

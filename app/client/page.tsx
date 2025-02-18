@@ -1,13 +1,12 @@
 import React from 'react';
+import MovieCarousel from "@/components/MovieCarousel";
 import Link from "next/link";
 import {updateSession} from "@/lib/sessions";
 
-const Home = async () => {
+export default function Home() {
     return (
-        <div className={""}>
-            Home
-        </div>
+      <div className="w-full h-screen">
+        <MovieCarousel />
+      </div>
     );
-};
-
-export default Home;
+  }

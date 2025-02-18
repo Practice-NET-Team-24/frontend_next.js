@@ -38,7 +38,7 @@ export default function ClientPage() {
 
   const handleLogout = async () => {
     await fetch("/api/logout", { method: "POST" });
-    router.push("/client/login");
+    router.push("/userpage/login");
   };
   
 
@@ -64,7 +64,7 @@ export default function ClientPage() {
                 <TableCell>{booking.film.name}</TableCell>
                 <TableCell>{booking.session.time}</TableCell>
                 <TableCell>
-                  <Button variant="outline" onClick={() => router.push(`/client/film/${booking.film.id}`)}>
+                  <Button variant="outline" onClick={() => router.push(`/userpage/film/${booking.film.id}`)}>
                     View
                   </Button>
                   <Button variant="destructive" className="ml-2" onClick={() => cancelBooking(booking.id)}>

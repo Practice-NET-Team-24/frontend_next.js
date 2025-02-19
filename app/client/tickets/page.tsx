@@ -96,19 +96,19 @@ export default function TicketPage() {
 
       {/* 🔥 Додано постер та назву фільму */}
       <div className={styles.movieInfo}>
-  {moviePoster ? (
-    <Image
-      src={moviePoster}
-      alt={movieTitle || "Постер фільму"}
-      width={200}
-      height={300}
-      className={styles.moviePoster}
-    />
-  ) : (
-    <div className={styles.noPoster}>❌ Постер відсутній</div>
-  )}
-  <h2 className={styles.movieTitle}>{movieTitle}</h2>
-</div>
+        {moviePoster ? (
+          <Image
+            src={moviePoster}
+            alt={movieTitle || "Постер фільму"}
+            width={200}
+            height={300}
+            className={styles.moviePoster}
+          />
+        ) : (
+          <div className={styles.noPoster}>❌ Постер відсутній</div>
+        )}
+        <h2 className={styles.movieTitle}>{movieTitle}</h2>
+      </div>
 
 
       {/* Вибір дати */}
@@ -144,6 +144,7 @@ export default function TicketPage() {
         <div className={styles.seatMap}>
           {seats.map((row, rowIndex) => (
             <div key={rowIndex} className={styles.row}>
+              <span className={styles.rowNumber}>Ряд {rowIndex + 1}</span> {/* ✅ Додано номер ряду */}
               {row.map(({ row, seat }) => (
                 <button
                   key={`${row}-${seat}`}
@@ -157,6 +158,7 @@ export default function TicketPage() {
           ))}
         </div>
       </div>
+
 
       {/* Підтвердження */}
       <div className={styles.confirmation}>

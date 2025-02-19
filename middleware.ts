@@ -21,7 +21,7 @@ export default async function middleware(req: NextRequest) {
     // 3. Decrypt the session from the cookie
     const cookie = (await cookies()).get('session')?.value
     const session = await decrypt(cookie)
-
+/*
     console.log('session', session)
     if (isProtectedRoute && (session && session.role !== Role.ADMIN)) {
         return NextResponse.redirect(new URL('/client', req.nextUrl));
@@ -29,7 +29,7 @@ export default async function middleware(req: NextRequest) {
     if (isProtectedRoute && (!session || session.role !== Role.ADMIN)) {
         return NextResponse.redirect(new URL('/client/login', req.nextUrl));
     }
-
+*/
 
 
     return NextResponse.next()

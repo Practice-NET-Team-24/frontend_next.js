@@ -34,12 +34,12 @@ const data = {
       isActive: true,
       items: [
         {
-          title: "edit",
+          title: "Edit",
           url: "/admin/film/edit",
         },
         {
           title: "Create",
-          url: "#",
+          url: "/admin/film/create",
         },
       ],
     },
@@ -65,7 +65,7 @@ const data = {
       items: [
         {
           title: "General",
-          url: "#",
+          url: "/admin/settings",
         },
       ],
     },

@@ -1,15 +1,17 @@
 import React from "react";
 import Link from "next/link";
-import {verifySession} from "@/lib/dal";
+import { verifySession } from "@/lib/dal";
 import signOutHandler from "@/lib/signOutHandler";
+import styles from "@/styles/Navbar.module.css";
 
 const Navbar = async () => {
     const session = await verifySession();
 
     return (
-        <div className={"px-14 py-4 navbar-shadow"}>
-            <div className={"flex justify-between items-center"}>
-                <div className="logo">
+        <div className={styles.navbar}>
+            <div className={styles.container}>
+                {/* Логотип */}
+                <div className={styles.logo}>
                     <Link href="/">
                         <img
                             width={80}
@@ -17,49 +19,40 @@ const Navbar = async () => {
                             alt="logo"
                         />
                     </Link>
-
                 </div>
-                {
-                    session.isAuth
-                    ?<div className={"flex justify-between items-center gap-6"}>
-                            <div>PROGRAM</div>
-                            {
-                                session.role === "Admin"
-                                    ? <Link href="/admin">
-                                            <button
-                                                type={"submit"}
-                                                className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium  hover:text-gray-700 md:flex-none md:justify-start md:p-2 md:px-3 dark text-black">
-                                                <div className="hidden md:block  w-full">Admin Page</div>
-                                            </button>
-                                        </Link>
-                                    : null
-                            }
-                            <form
-                                action={signOutHandler}
-                            >
 
-                                <button
-                                    type={"submit"}
-                                    className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium  hover:text-gray-700 md:flex-none md:justify-start md:p-2 md:px-3 dark text-black">
-                                    <div className=" w-full">Sign Out</div>
+                {/* Центр - "Афіша" як активна кнопка */}
+                <Link href="/client/program" className={styles.menuItem}>
+                    Афіша
+                </Link>
+
+                {/* Правий блок */}
+                {session.isAuth ? (
+                    <div className={styles.rightSection}>
+                        {session.role === "Admin" && (
+                            <Link href="/admin">
+                                <button className={styles.adminButton}>
+                                    Admin Page
                                 </button>
-                            </form>
-                        </div>
-                    :<div className={"flex justify-between items-center gap-6"}>
-                        <div>PROGRAM</div>
-                        <div>
-                            <Link href={"/client/login"}>Log In</Link>
-                        </div>
-                        <div>
-                            <Link href={"/client/signup"}>Sign Up</Link>
-
-                        </div>
+                            </Link>
+                        )}
+                        <form action={signOutHandler}>
+                            <button className={styles.authButton}>Вийти</button>
+                        </form>
                     </div>
-                }
-
+                ) : (
+                    <div className={styles.authContainer}>
+                        <Link href="/client/login" className={styles.authLink}>
+                            Вхід
+                        </Link>
+                        <Link href="/client/signup" className={styles.authLink}>
+                            Реєстрація
+                        </Link>
+                    </div>
+                )}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Navbar
+export default Navbar;

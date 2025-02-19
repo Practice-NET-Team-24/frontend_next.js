@@ -7,7 +7,6 @@
   /* Кнопки перемикання (стрілки) */
   .swiper-button-next,
   .swiper-button-prev {
-    color: white !important; /* Примусово змінюємо колір */
     background: rgba(0, 0, 0, 0.5) !important; /* Темний фон */
     border-radius: 50%;
     width: 50px;
@@ -30,7 +29,6 @@
   
   /* Стиль для крапочок (пагінації) */
   .swiper-pagination-bullet {
-    background: white !important; /* Білий колір */
     width: 12px !important;
     height: 12px !important;
     opacity: 0.7 !important;

@@ -5,16 +5,49 @@ import Image from "next/image";
 import Link from "next/link";
 
 // 🔥 1. Додаємо інтерфейс для фільму
-interface Movie {
-  id: number;
-  title: string;
-  poster_path: string;
-  vote_average: number;
-  release_date: string;
+export type Movies = Movie[]
+
+export interface Movie {
+  id: number
+  name: string
+  description: string
+  imageURL: string
+  trailerURL: string
+  ageRestriction: number
+  duration: number
+  rating: number
+  movieActors: MovieActor[]
+  movieGenres: MovieGenre[]
 }
 
-const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-const API_URL = `https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=uk-UA&page=1`;
+export interface MovieActor {
+  id: number
+  movieId: number
+  actorId: number
+  role: string
+  actor: Actor
+}
+
+export interface Actor {
+  id: number
+  name: string
+  surname: string
+}
+
+export interface MovieGenre {
+  id: number
+  movieId: number
+  genreId: number
+  genre: Genre
+}
+
+export interface Genre {
+  id: number
+  name: string
+}
+
+
+const API_URL = `http://localhost:5227/api/Movies`;
 
 export default function Afisha() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -25,12 +58,14 @@ export default function Afisha() {
         const response = await fetch(API_URL);
         const data = await response.json();
 
-        // 🔥 2. Перевіряємо, чи є у відповіді `results`
-        if (!data.results || !Array.isArray(data.results)) {
-          throw new Error("Некоректна відповідь API");
-        }
+        console.log(data)
 
-        setMovies(data.results);
+        // 🔥 2. Перевіряємо, чи є у відповіді `results`
+        // if (!data.results || !Array.isArray(data.results)) {
+        //   throw new Error("Некоректна відповідь API");
+        // }
+
+        setMovies(data);
       } catch (error) {
         console.error("Помилка завантаження фільмів:", error);
       }
@@ -45,16 +80,15 @@ export default function Afisha() {
         {movies.map((movie) => (
           <div key={movie.id} className="bg-gray-800 p-4 rounded-lg shadow-lg">
             <Image
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.title}
+              src={`${movie.imageURL}`}
+              alt={movie.name}
               width={500}
               height={750}
               className="rounded-lg object-cover"
             />
-            <h2 className="text-xl font-semibold mt-4 text-white">{movie.title}</h2>
-            <p className="text-gray-400">Рейтинг: {movie.vote_average}/10</p>
-            <p className="text-gray-400">Дата виходу: {movie.release_date}</p>
-            <Link href={`/client/tickets?movie=${encodeURIComponent(movie.title)}`}>
+            <h2 className="text-xl font-semibold mt-4 text-white">{movie.name}</h2>
+            <p className="text-gray-400">Рейтинг: {movie.rating}/10</p>
+            <Link href={`/client/tickets?movie=${encodeURIComponent(movie.name)}`}>
               <button className="mt-4 w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition">
                 Купити квиток
               </button>

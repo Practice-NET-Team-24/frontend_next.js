@@ -6,7 +6,7 @@ import {updateSession} from "@/lib/sessions";
 export default function Home() {
     return (
       <div className="w-full h-screen">
-        <MovieCarousel />
+        {/* <MovieCarousel /> */}
       </div>
     );
   }

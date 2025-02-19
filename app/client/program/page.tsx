@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// 🔥 1. Додаємо інтерфейс для фільму
+
 export type Movies = Movie[]
 
 export interface Movie {
@@ -58,13 +58,6 @@ export default function Afisha() {
         const response = await fetch(API_URL);
         const data = await response.json();
 
-        console.log(data)
-
-        // 🔥 2. Перевіряємо, чи є у відповіді `results`
-        // if (!data.results || !Array.isArray(data.results)) {
-        //   throw new Error("Некоректна відповідь API");
-        // }
-
         setMovies(data);
       } catch (error) {
         console.error("Помилка завантаження фільмів:", error);
@@ -76,7 +69,7 @@ export default function Afisha() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-center mb-8">Афіша</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {movies.map((movie) => (
           <div key={movie.id} className="bg-gray-800 p-4 rounded-lg shadow-lg">
             <Image
@@ -89,6 +82,7 @@ export default function Afisha() {
             <h2 className="text-xl font-semibold mt-4 text-white">{movie.name}</h2>
             <p className="text-gray-400">Рейтинг: {movie.rating}/10</p>
             <Link href={`/client/tickets?movie=${encodeURIComponent(movie.name)}`}>
+
               <button className="mt-4 w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition">
                 Купити квиток
               </button>

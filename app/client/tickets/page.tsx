@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Link from "next/link";
+import Image from "next/image";
 import { registerLocale } from "react-datepicker";
 import styles from "@/styles/TicketPage.module.css";
 import { uk } from "date-fns/locale";
@@ -40,6 +41,45 @@ export default function TicketPage() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [selectedSession, setSelectedSession] = useState<number | null>(null);
   const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
+  const [moviePoster, setMoviePoster] = useState<string | null>(null);
+  const [movieTitle, setMovieTitle] = useState<string | null>("");
+
+  const searchParams = useSearchParams();
+  const movie = searchParams.get("movie") || "Назва фільму";
+  const movieId = searchParams.get("id");
+
+  useEffect(() => {
+    async function fetchMovieDetails() {
+      if (!movieId) {
+        setMovieTitle(movie);
+        return;
+      }
+
+      try {
+        const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+        const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=uk-UA`);
+        const data = await response.json();
+
+        if (data && data.title) {
+          setMovieTitle(data.title);
+        } else {
+          setMovieTitle(movie);
+        }
+
+        if (data.poster_path) {
+          setMoviePoster(`https://image.tmdb.org/t/p/w500${data.poster_path}`);
+        } else {
+          setMoviePoster(null);
+        }
+      } catch (error) {
+        console.error("Помилка завантаження фільму:", error);
+        setMovieTitle(movie);
+        setMoviePoster(null);
+      }
+    }
+
+    fetchMovieDetails();
+  }, [movieId, movie]);
 
   const toggleSeat = (row: number, seat: number) => {
     const isSelected = selectedSeats.some((s) => s.row === row && s.seat === seat);
@@ -54,14 +94,31 @@ export default function TicketPage() {
     <div className={styles.container}>
       <h1 className={styles.title}>Купівля квитків</h1>
 
+      {/* 🔥 Додано постер та назву фільму */}
+      <div className={styles.movieInfo}>
+        {moviePoster ? (
+          <Image
+            src={moviePoster}
+            alt={movieTitle || "Постер фільму"}
+            width={200}
+            height={300}
+            className={styles.moviePoster}
+          />
+        ) : (
+          <div className={styles.noPoster}>❌ Постер відсутній</div>
+        )}
+        <h2 className={styles.movieTitle}>{movieTitle}</h2>
+      </div>
+
+
       {/* Вибір дати */}
       <div>
-      <DatePicker
-              placeholderText="Оберіть дату"  // Текст підказки
-              onChange={(date: Date | null) => setSelectedDate(date)}
-              dateFormat="yyyy-MM-dd"
-              locale="uk"  // Встановлюємо українську мову
-              className={styles.datepicker}
+        <DatePicker
+          placeholderText="Оберіть дату"
+          onChange={(date: Date | null) => setSelectedDate(date)}
+          dateFormat="yyyy-MM-dd"
+          locale="uk"
+          className={styles.datepicker}
         />
       </div>
 
@@ -87,6 +144,7 @@ export default function TicketPage() {
         <div className={styles.seatMap}>
           {seats.map((row, rowIndex) => (
             <div key={rowIndex} className={styles.row}>
+              <span className={styles.rowNumber}>Ряд {rowIndex + 1}</span> {/* ✅ Додано номер ряду */}
               {row.map(({ row, seat }) => (
                 <button
                   key={`${row}-${seat}`}
@@ -100,6 +158,7 @@ export default function TicketPage() {
           ))}
         </div>
       </div>
+
 
       {/* Підтвердження */}
       <div className={styles.confirmation}>

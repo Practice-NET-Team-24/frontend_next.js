@@ -3,11 +3,15 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-
-export type Movies = Movie[]
+export interface Movies {
+  $id: string
+  $values: Movie[]
+}
 
 export interface Movie {
+  $id: string
   id: number
   name: string
   description: string
@@ -16,11 +20,17 @@ export interface Movie {
   ageRestriction: number
   duration: number
   rating: number
-  movieActors: MovieActor[]
-  movieGenres: MovieGenre[]
+  movieActors: MovieActors
+  movieGenres: MovieGenres
 }
 
-export interface MovieActor {
+export interface MovieActors {
+  $id: string
+  $values: Value2[]
+}
+
+export interface Value2 {
+  $id: string
   id: number
   movieId: number
   actorId: number
@@ -29,12 +39,19 @@ export interface MovieActor {
 }
 
 export interface Actor {
+  $id: string
   id: number
   name: string
   surname: string
 }
 
-export interface MovieGenre {
+export interface MovieGenres {
+  $id: string
+  $values: Value3[]
+}
+
+export interface Value3 {
+  $id: string
   id: number
   movieId: number
   genreId: number
@@ -42,20 +59,22 @@ export interface MovieGenre {
 }
 
 export interface Genre {
+  $id: string
   id: number
   name: string
 }
 
 
-const API_URL = `http://localhost:5227/api/Movies`;
 
 export default function Afisha() {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;  
+  const [movies, setMovies] = useState<Movies>();
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchMovies() {
       try {
-        const response = await fetch(API_URL);
+        const response = await fetch(`${NEXT_PUBLIC_API_URL}/api/Movies`);
         const data = await response.json();
 
         setMovies(data);
@@ -70,8 +89,8 @@ export default function Afisha() {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-center mb-8">Афіша</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {movies.map((movie) => (
-          <div key={movie.id} className="bg-gray-800 p-4 rounded-lg shadow-lg">
+        {movies && movies.$values.map((movie) => (
+          <div key={movie.id} className="bg-gray-800 p-4 rounded-lg shadow-lg cursor-pointer" onClick={() => router.push(`/client/movie/${movie.id}`)}>
             <Image
               src={`${movie.imageURL}`}
               alt={movie.name}
@@ -91,5 +110,5 @@ export default function Afisha() {
         ))}
       </div>
     </div>
-  );
+  )
 }

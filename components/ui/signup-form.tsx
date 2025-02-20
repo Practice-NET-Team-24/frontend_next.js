@@ -1,19 +1,62 @@
 'use client';
 import { signup } from '@/lib/actions';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {useSearchParams} from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+
+export interface RegisterForm {
+    name: string
+    email: string
+    password: string
+}
+
 
 export default function SignupForm() {
+    const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get('callbackUrl') || '/client';
-    const [state, action, pending] = useActionState(signup, undefined);
+    const router = useRouter();
+    const [pending, setPending] = useState(false);
+
+    const [userForm, setUserForm] = useState<RegisterForm>({
+        name: '',
+        email: '',
+        password: '',
+    });
+
+    const handleInputChange = (property: keyof RegisterForm) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (userForm)
+            setUserForm({ ...userForm, [property]: event.target.value });
+    };
+
+    const handleFormSubmission = async () => {
+        setPending(true);
+        if (!userForm) return;
+        try {
+            const response = await fetch(`${NEXT_PUBLIC_API_URL}/api/Account/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userForm),
+            });
+
+            if (response.ok) {
+                router.push(callbackUrl);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+        setPending(false);
+    };
+
 
     return (
-        <form action={action} className={cn("flex flex-col gap-6")}>
+        <div className={cn("flex flex-col gap-6")}>
             <Card>
                 <CardHeader>
                     <CardTitle className="text-2xl">Sign Up</CardTitle>
@@ -30,8 +73,9 @@ export default function SignupForm() {
                                 name="username"
                                 placeholder="Username"
                                 required
+                                value={userForm?.name}
+                                onChange={handleInputChange('name')}
                             />
-                            {state?.errors?.username && <p className="text-red-500">{state.errors.username}</p>}
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="email">Email</Label>
@@ -42,8 +86,9 @@ export default function SignupForm() {
                                 name="email"
                                 placeholder="Enter your email address"
                                 required
+                                value={userForm?.email}
+                                onChange={handleInputChange('email')}
                             />
-                            {state?.errors?.email && <p className="text-red-500">{state.errors.email}</p>}
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="password">Password</Label>
@@ -54,18 +99,19 @@ export default function SignupForm() {
                                 name="password"
                                 placeholder="Enter password"
                                 required
-                                minLength={6}
+                                minLength={8}
+                                value={userForm?.password}
+                                onChange={handleInputChange('password')}
                             />
-                            {state?.errors?.password && <p className="text-red-500">{state.errors.password}</p>}
                         </div>
 
-                        <Button className="mt-4 w-full" aria-disabled={pending}>
+                        <button className="mt-4 w-full" aria-disabled={pending} onClick={handleFormSubmission}>
                             <input type="hidden" name="redirectTo" value={callbackUrl} />
                             {pending ? "Processing..." : "Sign Up"}
-                        </Button>
+                        </button>
                     </div>
                 </CardContent>
             </Card>
-        </form>
+        </div>
     );
 }

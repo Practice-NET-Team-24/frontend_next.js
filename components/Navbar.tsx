@@ -1,11 +1,21 @@
+'use client'
+
 import React from "react";
 import Link from "next/link";
-import { verifySession } from "@/lib/dal";
-import signOutHandler from "@/lib/signOutHandler";
 import styles from "@/styles/Navbar.module.css";
+import { useRouter } from "next/navigation";
 
-const Navbar = async () => {
-    const session = await verifySession();
+const Navbar = () => {
+    let token: string | null = null;
+    if (window != undefined)
+        token = window.localStorage.getItem('token')
+    else token = null
+    const router = useRouter();
+
+    const Logout = () => {
+        window.localStorage.removeItem('token')
+        router.push('/client/login')
+    }
 
     return (
         <div className={styles.navbar}>
@@ -27,18 +37,10 @@ const Navbar = async () => {
                 </Link>
 
                 {/* Правий блок */}
-                {session.isAuth ? (
-                    <div className={styles.rightSection}>
-                        {session.role === "Admin" && (
-                            <Link href="/admin">
-                                <button className={styles.adminButton}>
-                                    Admin Page
-                                </button>
-                            </Link>
-                        )}
-                        <form action={signOutHandler}>
-                            <button className={styles.authButton}>Вийти</button>
-                        </form>
+                {token ? (
+                    <div className={`${styles.rightSection} flex-nowrap`}>
+                        <button className={`${styles.authButton} mr-3`} onClick={() => router.push('/user')}>Особистий кабінет</button>
+                        <button className={styles.authButton} onClick={Logout}>Вийти</button>
                     </div>
                 ) : (
                     <div className={styles.authContainer}>

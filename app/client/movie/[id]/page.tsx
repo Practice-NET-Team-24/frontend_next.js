@@ -4,29 +4,95 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import styles from "@/styles/MovieDetails.module.css";
 
-interface Movie {
-  id: number;
-  title: string;
-  poster_path: string;
-  backdrop_path: string;
-  overview: string;
-  vote_average: number;
-  release_date: string;
-  runtime: number;
-  genres: { id: number; name: string }[];
+export interface Movie {
+  $id: string
+  id: number
+  name: string
+  description: string
+  imageURL: string
+  trailerURL: string
+  ageRestriction: number
+  duration: number
+  rating: number
+  sessions: any
+  movieGenres: MovieGenres
+  movieActors: MovieActors
 }
 
-interface Video {
-  key: string;
-  type: string;
-  site: string;
+export interface MovieGenres {
+  $id: string
+  $values: Value[]
 }
 
-const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+export interface Value {
+  $id: string
+  id: number
+  movieId: number
+  genreId: number
+  movie: Movie
+  genre: Genre
+}
+
+export interface Movie {
+  $ref: string
+}
+
+export interface Genre {
+  $id: string
+  id: number
+  name: string
+  movieGenres: MovieGenres2
+}
+
+export interface MovieGenres2 {
+  $id: string
+  $values: Value2[]
+}
+
+export interface Value2 {
+  $ref: string
+}
+
+export interface MovieActors {
+  $id: string
+  $values: Value3[]
+}
+
+export interface Value3 {
+  $id: string
+  id: number
+  movieId: number
+  actorId: number
+  role: string
+  movie: Movie2
+  actor: Actor
+}
+
+export interface Movie2 {
+  $ref: string
+}
+
+export interface Actor {
+  $id: string
+  id: number
+  name: string
+  surname: string
+  movieActors: MovieActors2
+}
+
+export interface MovieActors2 {
+  $id: string
+  $values: Value4[]
+}
+
+export interface Value4 {
+  $ref: string
+}
 
 export default function MovieDetails() {
+  const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   const [movie, setMovie] = useState<Movie | null>(null);
-  const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const params = useParams();
   const router = useRouter();
 
@@ -35,19 +101,11 @@ export default function MovieDetails() {
 
     const fetchMovieData = async () => {
       try {
-        const [movieRes, trailerRes] = await Promise.all([
-          fetch(`https://api.themoviedb.org/3/movie/${params.id}?api_key=${TMDB_API_KEY}&language=uk-UA`),
-          fetch(`https://api.themoviedb.org/3/movie/${params.id}/videos?api_key=${TMDB_API_KEY}&language=uk-UA`),
-        ]);
+        const data = await fetch(`${NEXT_PUBLIC_API_URL}/api/Movies/${params.id}`);
 
-        const movieData = await movieRes.json();
-        const trailerData = await trailerRes.json();
-
+        const movieData = await data.json();
         setMovie(movieData);
 
-        // Знаходимо перший YouTube-трейлер
-        const trailer = trailerData.results.find((video: Video) => video.type === "Trailer" && video.site === "YouTube");
-        if (trailer) setTrailerKey(trailer.key);
       } catch (error) {
         console.error("Помилка завантаження даних фільму:", error);
       }
@@ -62,7 +120,7 @@ export default function MovieDetails() {
     <div className={styles.container}>
       <div
         className={styles.background}
-        style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})` }}
+        // style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})` }}
       ></div>
 
       <div className={styles.overlay}></div>
@@ -70,29 +128,28 @@ export default function MovieDetails() {
       <div className={styles.content}>
         <div className={styles.movieInfo}>
           <img
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-            alt={movie.title}
+            src={`${movie.imageURL}`}
+            alt={movie.name}
             className={styles.poster}
           />
           <div className={styles.details}>
-            <h1>{movie.title}</h1>
-            <p><strong>Дата виходу:</strong> {movie.release_date}</p>
-            <p><strong>Рейтинг:</strong> {movie.vote_average}/10</p>
-            <p><strong>Жанр:</strong> {movie.genres.map((g) => g.name).join(", ")}</p>
-            <p><strong>Тривалість:</strong> {movie.runtime} хв</p>
-            <p>{movie.overview}</p>
+            <h1>{movie.name}</h1>
+            <p><strong>Рейтинг:</strong> {movie.rating}/10</p>
+            <p><strong>Жанр:</strong> {movie.movieGenres.$values.map((g) => g.genre.name).join(", ")}</p>
+            <p><strong>Тривалість:</strong> {movie.duration} хв</p>
+            <p>{movie.description}</p>
 
             <div className={styles.buttons}>
               <button
                 className={styles.buyButton}
-                onClick={() => router.push(`/client/tickets?movie=${encodeURIComponent(movie.title)}&id=${movie.id}`)}
+                onClick={() => router.push(`/client/tickets?movie=${encodeURIComponent(movie.name)}&id=${movie.id}`)}
               >
                 Купити квиток
               </button>
 
-              {trailerKey && (
+              {movie.trailerURL && (
                 <a
-                  href={`https://www.youtube.com/watch?v=${trailerKey}`}
+                  href={`${movie.trailerURL}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.trailerButton}

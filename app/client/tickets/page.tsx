@@ -4,80 +4,59 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Image from "next/image";
 import { registerLocale } from "react-datepicker";
 import styles from "@/styles/TicketPage.module.css";
 import { uk } from "date-fns/locale";
 
 registerLocale("uk", uk);
 
-interface Session {
+export interface Session {
   id: number;
-  time: string;
+  movieId: number;
+  hallId: number;
+  dateTimeStart: string;
+  dateTimeEnd: string;
   price: number;
+  reservedPlaces: number;
 }
 
 interface Seat {
   row: number;
   seat: number;
-  selected?: boolean;
 }
-
-const sessions: Session[] = [
-  { id: 1, time: "12:00", price: 200 },
-  { id: 2, time: "15:30", price: 250 },
-  { id: 3, time: "18:00", price: 300 },
-];
 
 const seats: Seat[][] = Array.from({ length: 5 }, (_, row) =>
   Array.from({ length: 10 }, (_, col) => ({
     row: row + 1,
     seat: col + 1,
-    selected: false,
   }))
 );
 
 export default function TicketPage() {
+  const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [selectedSession, setSelectedSession] = useState<number | null>(null);
   const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
-  const [moviePoster, setMoviePoster] = useState<string | null>(null);
-  const [movieTitle, setMovieTitle] = useState<string | null>("");
-
+  const [sessions, setSessions] = useState<Session[]>([]);
   const searchParams = useSearchParams();
   const movie = searchParams.get("movie") || "Назва фільму";
   const movieId = searchParams.get("id");
+  let token: string | null = null;
+
+  if (window != undefined)
+    token = window.localStorage.getItem('token')
+  else token = null
 
   useEffect(() => {
     async function fetchMovieDetails() {
-      if (!movieId) {
-        setMovieTitle(movie);
-        return;
-      }
-
       try {
-        const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-        const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=uk-UA`);
+        const response = await fetch(`${NEXT_PUBLIC_API_URL}/api/Sessions/movie/${movieId}`);
         const data = await response.json();
-
-        if (data && data.title) {
-          setMovieTitle(data.title);
-        } else {
-          setMovieTitle(movie);
-        }
-
-        if (data.poster_path) {
-          setMoviePoster(`https://image.tmdb.org/t/p/w500${data.poster_path}`);
-        } else {
-          setMoviePoster(null);
-        }
+        setSessions(data.$values);
       } catch (error) {
         console.error("Помилка завантаження фільму:", error);
-        setMovieTitle(movie);
-        setMoviePoster(null);
       }
     }
-
     fetchMovieDetails();
   }, [movieId, movie]);
 
@@ -90,28 +69,52 @@ export default function TicketPage() {
     }
   };
 
+  const buyTicket = async () => {
+    if (!selectedSession || selectedSeats.length === 0) {
+      alert("Будь ласка, оберіть сеанс та місця перед покупкою!");
+      return;
+    }
+
+    try {
+      console.log(selectedSession);
+      const response = await fetch(`${NEXT_PUBLIC_API_URL}/api/Tickets/purchase`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(
+          {
+            id: 0,
+            placeId: 1,
+            sessionId: selectedSession,
+            userId: 5, // You might need to replace this with the actual user ID
+            rowNumber: 1,
+            seatNumber: 1,
+            createdAt: new Date().toISOString(),
+          }
+
+        ),
+      });
+
+      if (!response.ok) throw new Error("Помилка при покупці квитка!");
+
+      alert("Квиток успішно придбано!");
+      setSelectedSeats([]); // Reset selection after purchase
+    } catch (error) {
+      console.error("Помилка при покупці:", error);
+      alert("Сталася помилка, спробуйте ще раз.");
+    }
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Купівля квитків</h1>
 
-      {/* 🔥 Додано постер та назву фільму */}
       <div className={styles.movieInfo}>
-        {moviePoster ? (
-          <Image
-            src={moviePoster}
-            alt={movieTitle || "Постер фільму"}
-            width={200}
-            height={300}
-            className={styles.moviePoster}
-          />
-        ) : (
-          <div className={styles.noPoster}>❌ Постер відсутній</div>
-        )}
-        <h2 className={styles.movieTitle}>{movieTitle}</h2>
+        <h2 className={styles.movieTitle}>{movie}</h2>
       </div>
 
-
-      {/* Вибір дати */}
       <div>
         <DatePicker
           placeholderText="Оберіть дату"
@@ -122,7 +125,6 @@ export default function TicketPage() {
         />
       </div>
 
-      {/* Вибір сеансу */}
       <div className={styles.sessions}>
         <p>Оберіть сеанс:</p>
         <div className={styles.sessionList}>
@@ -132,23 +134,28 @@ export default function TicketPage() {
               className={`${styles.session} ${selectedSession === session.id ? styles.selected : ""}`}
               onClick={() => setSelectedSession(session.id)}
             >
-              {session.time} - {session.price} грн
+              {new Date(session.dateTimeStart).toLocaleTimeString("uk-UA", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })}{" "}
+              - {session.price} $
             </button>
           ))}
         </div>
       </div>
 
-      {/* Вибір місць */}
       <div className={styles.seats}>
         <p>Оберіть місця:</p>
         <div className={styles.seatMap}>
           {seats.map((row, rowIndex) => (
             <div key={rowIndex} className={styles.row}>
-              <span className={styles.rowNumber}>Ряд {rowIndex + 1}</span> {/* ✅ Додано номер ряду */}
+              <span className={styles.rowNumber}>Ряд {rowIndex + 1}</span>
               {row.map(({ row, seat }) => (
                 <button
                   key={`${row}-${seat}`}
-                  className={`${styles.seat} ${selectedSeats.some((s) => s.row === row && s.seat === seat) ? styles.selected : ""}`}
+                  className={`${styles.seat} ${selectedSeats.some((s) => s.row === row && s.seat === seat) ? styles.selected : ""
+                    }`}
                   onClick={() => toggleSeat(row, seat)}
                 >
                   {seat}
@@ -159,17 +166,26 @@ export default function TicketPage() {
         </div>
       </div>
 
-
-      {/* Підтвердження */}
       <div className={styles.confirmation}>
         <p>
           Дата: <strong>{selectedDate ? selectedDate.toLocaleDateString() : "Не обрано"}</strong>
         </p>
         <p>
-          Сеанс: <strong>{sessions.find((s) => s.id === selectedSession)?.time || "Не обрано"}</strong>
+          Сеанс:{" "}
+          <strong>
+            {selectedSession
+              ? new Date(sessions.find((s) => s.id === selectedSession)?.dateTimeStart || "").toLocaleTimeString("uk-UA", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })
+              : "Не обрано"}
+          </strong>
         </p>
         <p>Місця: {selectedSeats.map((s) => `Ряд ${s.row}, Місце ${s.seat}`).join(", ") || "Не обрано"}</p>
-        <button className={styles.buyButton}>Підтвердити покупку</button>
+        <button className={styles.buyButton} onClick={buyTicket}>
+          Підтвердити покупку
+        </button>
       </div>
     </div>
   );
